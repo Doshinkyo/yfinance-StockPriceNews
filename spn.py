@@ -8,6 +8,7 @@
 # v0.0.3 17th December 2021 Error handing for “IndexError" if fewer than 5 news stories are available. Moved stock price towards the top of the script output
 # v0.0.4 17th December 2021 Added logic for more natural language on price change
 # v0.0.5 20th December 2021 Achieved aim of making Unix TimeStamps readable and replaced keys from dictionary with formatted titles e.g. "title" became "Headline"
+# v0.0.6 20th December 2021 Adedd error handling for invalid ticker entry and bespoke message for stocks with no news (untested feature).
 
 # Import required modules
 import yfinance as yf
@@ -21,10 +22,15 @@ print("\n ***** Stock Price & News Version 0.0.5 Written by http://ResonanceIT.c
 choice = input("Enter a Ticker symbol to retrieve news and stock price info for a company\n\n")
 
 # Store the entered stock ticker as the variable "stock"
+
 stock = yf.Ticker(choice)
 
-# Store the company name for the user supplied ticker in the variable "shortname"
-shortname = stock.info["shortName"]
+# Store the company name for the user supplied ticker in the variable "shortname" and erro handle if an invalid ticker was chosen
+try: 
+    shortname = stock.info["shortName"]
+except KeyError:
+    print("\nNo Stock matching the symbol " + "'" + choice + "'" + " was found. Please try again.\n\n")
+    exit()
 
 # Get current and previous day's close stock prices as well as the local currency for the stock
 price = round(float(stock.info["regularMarketPrice"]), 2)
@@ -62,7 +68,7 @@ print("\n" + "The most recent news stories, accessible from Yahoo Finance, for: 
 # Create a variable to store the news articles which are in the format of a list of dictionaries in yfinance
 news = stock.news
 
-# Break the 'list of dictionaries' from the "news" variable into 5 individual un-nested lists so that they can have their keys and values broken out onto individual lines
+# Error handling in case no news items are found
 try: 
     article_0 = dict(news[0])
 except IndexError:
@@ -88,12 +94,17 @@ try:
 except IndexError:
     article_4 = "No News"
 
+def no_news():
+    if article_0 == ("No News") and article_1 == ("No News") and article_2 == ("No News") and article_3 == ("No News") and article_4 == ("No News"):
+        print("There is no recent news available via Yahoo Finance for this company.")
+
 # Select the keys inside each of the lists to include in the news article print out and print each list of articles separated by a line break
 # Expanded in v0.0.5 to include formatted and bespoke Keys and formatting of the Unix TimeStamp
 # First Article
 dictfilt = lambda x, y: dict([ (i,x[i]) for i in x if i in set(y) ])
 wanted_keys_0 = ("title","publisher","link","providerPublishTime")
 article_0_result = dictfilt(article_0, wanted_keys_0)
+
 for key, value in article_0_result.items():
     if key == ("providerPublishTime"):
         unix_timestamp = int(value)
