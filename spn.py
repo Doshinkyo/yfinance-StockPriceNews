@@ -8,7 +8,7 @@
 # v0.0.3 17th December 2021 Error handing for “IndexError" if fewer than 5 news stories are available. Moved stock price towards the top of the script output
 # v0.0.4 17th December 2021 Added logic for more natural language on price change
 # v0.0.5 20th December 2021 Achieved aim of making Unix TimeStamps readable and replaced keys from dictionary with formatted titles e.g. "title" became "Headline"
-# v0.0.6 20th December 2021 Adedd error handling for invalid ticker entry and bespoke message for stocks with no news (untested feature).
+# v0.0.6 20th December 2021 Added error handling for invalid ticker entry and bespoke message for stocks with no news (untested feature).
 
 # Import required modules
 import yfinance as yf
