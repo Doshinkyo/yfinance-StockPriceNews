@@ -8,7 +8,7 @@
 # v0.0.3 17th December 2021 Error handing for “IndexError" if fewer than 5 news stories are available. Moved stock price towards the top of the script output
 # v0.0.4 17th December 2021 Added logic for more natural language on price change
 # v0.0.5 20th December 2021 Achieved aim of making Unix TimeStamps readable and replaced keys from dictionary with formatted titles e.g. "title" became "Headline"
-# v0.0.6 20th December 2021 Added error handling for invalid ticker entry and bespoke message for stocks with no news (untested feature).
+# v0.0.6 20th December 2021 Adedd error handling for invalid ticker entry and bespoke message for stocks with no news (untested feature).
 
 # Import required modules
 import yfinance as yf
@@ -68,7 +68,7 @@ print("\n" + "The most recent news stories, accessible from Yahoo Finance, for: 
 # Create a variable to store the news articles which are in the format of a list of dictionaries in yfinance
 news = stock.news
 
-# Error handling in case no news items are found
+# Error handling in case fewer than 5 news items are found
 try: 
     article_0 = dict(news[0])
 except IndexError:
@@ -93,6 +93,8 @@ try:
     article_4 = dict(news[4])
 except IndexError:
     article_4 = "No News"
+
+# Error handing in case no news items are found (untested as of 20th Dec 2021)
 
 def no_news():
     if article_0 == ("No News") and article_1 == ("No News") and article_2 == ("No News") and article_3 == ("No News") and article_4 == ("No News"):
