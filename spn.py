@@ -7,14 +7,15 @@
 # v0.0.2 16th December 2021 Added stock price info
 # v0.0.3 17th December 2021 Error handing for “IndexError" if fewer than 5 news stories are available. Moved stock price towards the top of the script output
 # v0.0.4 17th December 2021 Added logic for more natural language on price change
+# v0.0.5 20th December 2021 Achieved aim of making Unix TimeStamps readable and replaced keys from dictionary with formatted titles e.g. "title" became "Headline"
 
 # Import required modules
 import yfinance as yf
 
-# Module not required in current version of the script
-# from datetime import datetime
+# Module for readable unix timestamp conversion
+from datetime import datetime
 
-print("\n ***** Stock Price & News Version 0.0.4 Written by http://ResonanceIT.co.uk *****\n")
+print("\n ***** Stock Price & News Version 0.0.5 Written by http://ResonanceIT.co.uk *****\n")
 
 # Ask the user to enter a Stock symbol and store it in the "choice" variable
 choice = input("Enter a Ticker symbol to retrieve news and stock price info for a company\n\n")
@@ -56,74 +57,111 @@ else:
     print("In the last day the price has " + condString + " by " + stringDiff + "%")
 
 # Heading for the news articles which are to be returned
-print("\n" + "Most recent news stories accessible from Yahoo Finance for: " + shortname + " are:\n")
+print("\n" + "The most recent news stories, accessible from Yahoo Finance, for: " + shortname + " are:\n")
 
 # Create a variable to store the news articles which are in the format of a list of dictionaries in yfinance
 news = stock.news
 
 # Break the 'list of dictionaries' from the "news" variable into 5 individual un-nested lists so that they can have their keys and values broken out onto individual lines
 try: 
-    article0 = dict(news[0])
+    article_0 = dict(news[0])
 except IndexError:
-    article0 = "No News"
+    article_0 = "No News"
 
 try: 
-    article1 = dict(news[1])
+    article_1 = dict(news[1])
 except IndexError:
-    article1 = "No News"
+    article_1 = "No News"
 
 try: 
-    article2 = dict(news[2])
+    article_2 = dict(news[2])
 except IndexError:
-    article2 = "No News"
+    article_2 = "No News"
 
 try: 
-    article3 = dict(news[3])
+    article_3 = dict(news[3])
 except IndexError:
-    article3 = "No News"
+    article_3 = "No News"
 
 try: 
-    article4 = dict(news[4])
+    article_4 = dict(news[4])
 except IndexError:
-    article4 = "No News"
+    article_4 = "No News"
 
 # Select the keys inside each of the lists to include in the news article print out and print each list of articles separated by a line break
+# Expanded in v0.0.5 to include formatted and bespoke Keys and formatting of the Unix TimeStamp
 # First Article
 dictfilt = lambda x, y: dict([ (i,x[i]) for i in x if i in set(y) ])
-wanted_keys0 = ("title","publisher","link","providerPublishTime")
-article0result = dictfilt(article0, wanted_keys0)
-for key, value in article0result.items():
-    print(key, ' : ', value)
+wanted_keys_0 = ("title","publisher","link","providerPublishTime")
+article_0_result = dictfilt(article_0, wanted_keys_0)
+for key, value in article_0_result.items():
+    if key == ("providerPublishTime"):
+        unix_timestamp = int(value)
+        print("Date & Time", ":", datetime.utcfromtimestamp(unix_timestamp).strftime(" %b %d %Y @ %H:%M"))
+    elif key == ("title"):
+        print("Headline", '   : ', value)
+    elif key == ("publisher"):
+        print("Publisher", '  : ', value)
+    elif key == ("link"):
+        print("Web Link", '   : ', value)
 print("\n")
 
-# Second Article
 dictfilt = lambda x, y: dict([ (i,x[i]) for i in x if i in set(y) ])
-wanted_keys1 = ("title","publisher","link","providerPublishTime")
-article1result = dictfilt(article1, wanted_keys1)
-for key, value in article1result.items():
-    print(key, ' : ', value)
+wanted_keys_1 = ("title","publisher","link","providerPublishTime")
+article_1_result = dictfilt(article_1, wanted_keys_1)
+for key, value in article_1_result.items():
+    if key == ("providerPublishTime"):
+        unix_timestamp = int(value)
+        print("Date & Time", ":", datetime.utcfromtimestamp(unix_timestamp).strftime(" %b %d %Y @ %H:%M"))
+    elif key == ("title"):
+        print("Headline", '   : ', value)
+    elif key == ("publisher"):
+        print("Publisher", '  : ', value)
+    elif key == ("link"):
+        print("Web Link", '   : ', value)
 print("\n")
 
-# Third Article
 dictfilt = lambda x, y: dict([ (i,x[i]) for i in x if i in set(y) ])
-wanted_keys2 = ("title","publisher","link","providerPublishTime")
-article2result = dictfilt(article2, wanted_keys2)
-for key, value in article2result.items():
-    print(key, ' : ', value)
+wanted_keys_2 = ("title","publisher","link","providerPublishTime")
+article_2_result = dictfilt(article_2, wanted_keys_2)
+for key, value in article_2_result.items():
+    if key == ("providerPublishTime"):
+        unix_timestamp = int(value)
+        print("Date & Time", ":", datetime.utcfromtimestamp(unix_timestamp).strftime(" %b %d %Y @ %H:%M"))
+    elif key == ("title"):
+        print("Headline", '   : ', value)
+    elif key == ("publisher"):
+        print("Publisher", '  : ', value)
+    elif key == ("link"):
+        print("Web Link", '   : ', value)
 print("\n")
 
-# Fourth Article
 dictfilt = lambda x, y: dict([ (i,x[i]) for i in x if i in set(y) ])
-wanted_keys3 = ("title","publisher","link","providerPublishTime")
-article3result = dictfilt(article3, wanted_keys3)
-for key, value in article3result.items():
-    print(key, ' : ', value)
+wanted_keys_3 = ("title","publisher","link","providerPublishTime")
+article_3_result = dictfilt(article_3, wanted_keys_3)
+for key, value in article_3_result.items():
+    if key == ("providerPublishTime"):
+        unix_timestamp = int(value)
+        print("Date & Time", ":", datetime.utcfromtimestamp(unix_timestamp).strftime(" %b %d %Y @ %H:%M"))
+    elif key == ("title"):
+        print("Headline", '   : ', value)
+    elif key == ("publisher"):
+        print("Publisher", '  : ', value)
+    elif key == ("link"):
+        print("Web Link", '   : ', value)
 print("\n")
 
-# Fith Article
 dictfilt = lambda x, y: dict([ (i,x[i]) for i in x if i in set(y) ])
-wanted_keys4 = ("title","publisher","link","providerPublishTime")
-article4result = dictfilt(article4, wanted_keys4)
-for key, value in article4result.items():
-    print(key, ' : ', value)
+wanted_keys_4 = ("title","publisher","link","providerPublishTime")
+article_4_result = dictfilt(article_4, wanted_keys_4)
+for key, value in article_4_result.items():
+    if key == ("providerPublishTime"):
+        unix_timestamp = int(value)
+        print("Date & Time", ":", datetime.utcfromtimestamp(unix_timestamp).strftime(" %b %d %Y @ %H:%M"))
+    elif key == ("title"):
+        print("Headline", '   : ', value)
+    elif key == ("publisher"):
+        print("Publisher", '  : ', value)
+    elif key == ("link"):
+        print("Web Link", '   : ', value)
 print("\n")
