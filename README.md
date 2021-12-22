@@ -12,4 +12,4 @@ Compiled with pyinstaller, the desktop app can be downloaded from: http://resona
 Mac OS App: 
 Compiled with pyinstaller, the desktop app can be downloaded from: http://resonanceit.co.uk/SPN/spn_v1.0.0_Mac.zip
 
-![Screenshot of the Windows Desktop App](/screenshot.jpg?raw=true "Stock Price & News: Screenshot (Windows)")
+![Screenshot of the Windows Desktop App](/snip.jpg?raw=true "Stock Price & News: Screenshot (Windows)")
