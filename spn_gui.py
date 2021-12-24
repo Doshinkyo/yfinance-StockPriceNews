@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # This script will ask it's user for a stock ticker symbol and return some stock price info and the most recent news stories (5 max) available from the yfinance Python module
 # Aim is to revise this script so that the Unix Timestamp (providerPublishTime) is converted to a readable date in each news article printed out
 # Script requires the Python installed and the yfinance module. The module can be installed by executing the command "pip install yfinance" from a terminal
@@ -9,23 +10,21 @@
 # v0.0.4 17th December 2021 Added logic for more natural language on price change
 # v0.0.5 20th December 2021 Achieved aim of making Unix TimeStamps readable and replaced keys from dictionary with formatted titles e.g. "title" became "Headline"
 # v0.0.6 20th December 2021 Adedd error handling for invalid ticker entry and bespoke message for stocks with no news (untested feature).
-# v1.0.0 22nd Decemner 2021 Wrapped the inputs and outputs in tkinter to produce a GUI. "Clear" button not yet functional
+# v1.0.0 22nd Decemner 2021 Wrapped the inputs and outputs in tkinter to produce a GUI.
+# v1.1.0 24th December 2021 Deleted clear button. Added focus to entry, bound <Enter> to data retrieval + multiple UI enhancements
 
 # Import required modules
-from tkinter.constants import END
-from typing import Text
+import tkinter as tk
+from tkhtmlview import HTMLLabel
 import yfinance as yf
-
-# Module for readable unix timestamp conversion
 from datetime import datetime
 
-# Import the modules for GUI classes
-import tkinter as tk
-from tkinter import scrolledtext
+# Main window
+window = tk.Tk()
+window.iconbitmap("icon.ico") # Icon for app
 
 # Create a function which will output data to the "Price" label
 def retrieve_price_data():
-
     choice = ticker_input.get() # try defining as global along with "news"
     stock = yf.Ticker(choice) # try defining as global along with "news"
 
@@ -36,7 +35,7 @@ def retrieve_price_data():
         price_pane["text"] = null_ticker
         status_bar["text"] = "Please try again."
     
-    price_strapline = ("\n\nThe most recent stock price data for " + shortname + " is displayed below\n\n\n")
+    price_strapline = ("$" + choice + " (" + shortname + ") Price Data:\n\n")
 
     # Get current and previous day's close stock prices as well as the local currency for the stock
     price = round(float(stock.info["regularMarketPrice"]), 2)
@@ -78,7 +77,7 @@ def retrieve_news_data():
         print("\nNo Stock matching the symbol " + "'" + choice + "'" + " was found. Please try again.\n\n")
     
     # Heading for the news articles which are to be returned
-    news_strapline=("The most recent news stories, accessible from Yahoo Finance, for: " + shortname + " are:\n\n\n")
+    news_strapline=("$" + choice + " (" + shortname + ") News Articles:\n\n")
 
     # Create a variable to store the news articles which are in the format of a list of dictionaries in yfinance
     pub_dict = stock.get_news()
@@ -219,45 +218,78 @@ def retrieve_news_data():
               date_time_result_3 + headline_3 + headline_value_3 + publisher_3 + publisher_value_3 + web_link_3 + web_link_value_3 + publish_date_intro_4 + \
                 date_time_result_4 + headline_4 + headline_value_4 + publisher_4 + publisher_value_4 + web_link_4 + web_link_value_4
    
-    status_bar.configure(text="Stock Price & News - Developed by: http://www.ResonanceIT.co.uk")
+    status_bar.configure(text="$" + choice + " (" + shortname + ") Stock Price & News Retrieved")
 
-root = tk.Tk()
-root.iconbitmap("icon.ico")
+# Retrieve Price and News data when the enter key is selected
+def do_it(event):
+    status_bar["text"] = "Retrieving Data!"
+    retrieve_price_data()
+    retrieve_news_data()
+window.bind('<Return>', do_it)
+
+# MAIN APPLICATION WINDOW
 
 # Give the application a name and set it's size
-root.title("Stock Price & News")
-root.geometry("800x800")
+window.title("Stock Price & News")
+window.geometry("900x840")
+# window.configure(bg="#999999")
+# window.overrideredirect(True)
+window.columnconfigure(0, weight=1)
+window.columnconfigure(1, weight=3)
+window.columnconfigure(2, weight=1)
+window.rowconfigure(0, weight=3)
+window.rowconfigure(1, weight=7)
+window.rowconfigure(2, weight=30)
+window.rowconfigure(3, weight=1)
 
-# Control the behavior of the main window
-root.columnconfigure(1, weight=1)
-root.rowconfigure(2, weight=1)
+# SECTIONS OF THE APP WINDOW
+
+frame_0=tk.Frame(window, borderwidth=1, relief="ridge") # Top frame containing search elements
+frame_1=tk.Frame(window, borderwidth=1, relief="ridge") # Price data pane
+frame_2=tk.Frame(window, borderwidth=1, relief="ridge") # News data pane
+frame_3=tk.Frame(window, borderwidth=1) # Status bar
+
+# Configure the frames
+frame_0.grid(row=0, columnspan=3, sticky="NSEW", ipadx=5, padx=5, pady=5)
+frame_1.grid(row=1, columnspan=3, sticky="NSEW", ipadx=5, padx=5)
+frame_2.grid(row=2, columnspan=3, sticky="NSEW", ipadx=5, padx=5, pady=5)
+frame_3.grid(row=3, columnspan=3, sticky="NSEW", ipadx=5, padx=5)
 
 # Create a ticker label and control its behavior
-ticker_label = tk.Label(root, text="Enter a ticker symbol to retrieve news and stock price info for a company:")
-ticker_label.grid(sticky="we", padx=5, pady=5)
+lbl_0 = tk.Label(text="Enter A Ticker :")
+lbl_0.grid(row=0, column=0, columnspan=1, padx=5, pady=5, ipadx=5, ipady=5)
 
 # Create a ticker input field and control its behavior
-ticker_input = tk.Entry(root, text="")
-ticker_input.grid(row=0, column=1, sticky=tk.E + tk.W, padx=5, pady=5)
+ticker_input = tk.Entry(text="")
+ticker_input.grid(row=0, column=1, columnspan=1, sticky=tk.E + tk.W, padx=5, pady=5)
+ticker_input.focus()
 
 # Create a search button and control its behavior
-search_btn = tk.Button(root, text="Search", command=lambda:[retrieve_price_data(),retrieve_news_data()])
-search_btn.grid(row=0, column=2, sticky=tk.E, padx=5, pady=5, ipadx=5, ipady=5)
+search_btn = tk.Button(borderwidth=1, relief="ridge", text="Search", command=lambda:[retrieve_price_data(),retrieve_news_data()], bg="#DFDFDF")
+search_btn.grid(row=0, column=2, columnspan=1, sticky=tk.E + tk.W, padx=45, ipadx=0, ipady=6)
 
 # Create a price lael and control its behavior
-price_pane = tk.Label(root, text="")
-price_pane.grid(row=1, column=0,  sticky=tk.E + tk.W, columnspan=2, ipadx=5, ipady=5)
+price_pane = tk.Label(text="Price Info Will Be Shown Here")
+price_pane.grid(row=1, column=0, columnspan=3, sticky=tk.N, padx=1, pady=10, ipadx=5, ipady=5)
 
-# Create a news label and control its behavior
-news_pane = tk.Label(root, text="")
-news_pane.grid(row=2, column=0,  sticky=tk.E + tk.W, columnspan=2, ipadx=5, ipady=5)
+# Create a price lael and control its behavior
+news_pane=tk.Label(text="News Articles Will Be Shown Here")
+news_pane.grid(row=2, column=0, columnspan=3, sticky=tk.N, padx=1, pady=10, ipadx=5, ipady=5)
 
 # Add a status bar to the applicaiton
-status_bar = tk.Label(root, text="")
-status_bar.grid(row=100, column=0, columnspan=2, ipadx=5, ipady=5)
+status_bar = tk.Label(text="Ready For User Input")
+status_bar.grid(row=3, column=1, columnspan=1, sticky=tk.W + tk.N, ipadx=5, ipady=7)
 
-# Create a reset button and control its behavior
-clear_btn = tk.Button(root, text="Clear")
-clear_btn.grid(row=3, column=2, sticky=tk.E, padx=5, pady=5, ipadx=5, ipady=5)
+# Application Decoration
+logo=HTMLLabel(height=1, width=15, html='<a style="font-size: 8px;color:black;text-decoration:none;text-align:right" href="http://ResonanceIT.co.uk">www.resonanceit.co.uk</a>')
+logo.grid(row=3, column=2, rowspan=1, columnspan=1, sticky=tk.E + tk.W + tk.N, ipadx=5, ipady=5)
 
-root.mainloop()
+# TEST STRINGS FOR MAKING NEWS URL's ACTIVE IN LATER RELEASE
+# news_url_prefix=('<a style="font-size: 8px;color:black;text-decoration:none;text-align:right" href="')
+# news_article_url=("http://resonanceit.co.uk")
+# news_url_appendix=('">www.resonanceit.co.uk</a>')
+# melange=(news_url_prefix + news_article_url + news_url_appendix)
+# print(melange)
+
+# End of app
+window.mainloop()
