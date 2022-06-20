@@ -7,10 +7,10 @@ Python GUI tkinter (file: spn_gui.py):
 This can be downloaded and executed via a terminal. It requires Python is installed. 
 
 Windows Desktop App: 
-Compiled with pyinstaller, the desktop app can be downloaded from: http://resonanceit.co.uk/SPN/spn_v1.1.0_win.zip
+Compiled with pyinstaller, the desktop app can be downloaded from: https://resonanceit.co.uk/SPN/spn_v1.1.0_win.zip
 
 Mac OS App: 
-Compiled with pyinstaller, the desktop app can be downloaded from: http://resonanceit.co.uk/SPN/spn_v1.1.0_mac.zip
+Compiled with pyinstaller, the desktop app can be downloaded from: https://resonanceit.co.uk/SPN/spn_v1.1.0_mac.zip
 
 Screenshot After Launch
 ![Screenshot After Launch](/app_launched.png?raw=true "Stock Price & News: Screenshot (Windows)")
